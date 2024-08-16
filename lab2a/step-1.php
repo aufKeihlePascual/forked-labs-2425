@@ -1,9 +1,8 @@
 <?php
-
-require "helpers/helper-functions.php";
-
-session_start();
+  require "helpers/helper-functions.php";
+  session_start();
 ?>
+
 <html>
 <head>
     <meta charset="utf-8">
@@ -35,9 +34,10 @@ session_start();
             <input type="text" name="contact_number" placeholder="+63901234567" required>
 
             <label>Sex</label><br />
-            <input type="radio" name="sex" value="male" checked="checked" required>Male
+            <input type="radio" name="sex" value="Male" checked="checked" required>Male
             <br />
-            <input type="radio" name="sex" value="male" checked="checked" required>Female
+            <input type="radio" name="sex" value="Female" checked="checked" required>Female
+            <br />
             <br />
 
             <input type="hidden" name="step" value="1">

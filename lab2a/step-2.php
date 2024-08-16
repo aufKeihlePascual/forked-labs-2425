@@ -1,21 +1,14 @@
 <?php
+  require "helpers/helper-functions.php";
+  session_start();
 
-require "helpers/helper-functions.php";
-
-session_start();
-
-$fullname = $_POST['fullname'];
-$email = $_POST['email'];
-# Encrypt the password first before saving it to the Session Variables
-$password = $_POST['password'];
-
-$_SESSION['fullname'] = $fullname;
-$_SESSION['email'] = $email;
-$_SESSION['password'] = $password;
-
-dump_session();
+  $_SESSION['fullname'] = $_POST['fullname'];
+  $_SESSION['birthdate'] = $_POST['birthdate'];
+  $_SESSION['contact_number'] = $_POST['contact_number'];
+  $_SESSION['sex'] = $_POST['sex'];
 
 ?>
+
 <html>
 <head>
     <meta charset="utf-8">
@@ -35,31 +28,32 @@ dump_session();
       </div>
       <div class="p-section--shallow">
 
-
         <form action="step-3.php" method="POST">
 
           <fieldset>
-            <label>Birthdate</label>
-            <input type="date" name="birthdate">
+            <label>Program</label>
+              <select name="program" required>
+                <option disabled="disabled" selected="">Select an option</option>
+                <option value="Computer Science">Computer Science</option>
+                <option value="Information Technology">Information Technology</option>
+                <option value="Information Systems">Information Systems</option>
+                <option value="Software Engineering">Software Engineering</option>
+                <option value="Data Science">Data Science</option>
+              </select>
 
-            <label>Sex</label>
-            <br />
-            <input type="radio" name="sex" value="male" checked="checked">Male
-            <br />
-            <input type="radio" name="sex" value="female">Female
-            <br />
+              <label>Complete Address</label>
+              <textarea name="address" rows="3" required></textarea>
 
-            <label>Complete Address</label>
-            <textarea name="address" rows="3"></textarea>
+              <input type="hidden" name="fullname" value="<?php echo $_SESSION['fullname']; ?>">
+              <input type="hidden" name="birthdate" value="<?php echo $_SESSION['birthdate']; ?>">
+              <input type="hidden" name="contact_number" value="<?php echo $_SESSION['contact_number']; ?>">
+              <input type="hidden" name="sex" value="<?php echo $_SESSION['sex']; ?>">
 
-            <button type="submit">Next</button>
+              <button type="submit">Next</button>
           </fieldset>
-
+          
         </form>
-
-
       </div>
-
     </div>
 
     <div class="col">
