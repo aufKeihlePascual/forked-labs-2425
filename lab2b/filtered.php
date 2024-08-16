@@ -1,42 +1,51 @@
 <?php
+    define('CUSTOMERS_FILE_PATH', 'customers-100000.csv');
 
-define('CUSTOMERS_FILE_PATH', 'customers-100.csv');
+    function get_customers_data($filter_letter)
+    {
+        $start_time = microtime(true);
 
-function get_hundred_customers_data( $filter_letter )
-{
-    $opened_file_handler = fopen(CUSTOMERS_FILE_PATH, 'r');
+        $opened_file_handler = fopen(CUSTOMERS_FILE_PATH, 'r');
 
-    $data = [];
-    $headers = [];
-    $row_count = 0;
-    while (!feof($opened_file_handler)) {
+        $data = [];
+        $headers = [];
+        $row_count = 0;
 
-        $row = fgetcsv($opened_file_handler, 1024);
-        if (!empty($row)) {
-            if ($row_count == 0) {
-                array_push($headers, $row);    
-            } else {
-                if ($row[3][0] == $filter_letter) {
-                    array_push($data, $row);
+        while (!feof($opened_file_handler)) {
+            $row = fgetcsv($opened_file_handler, 1024);
+            if (!empty($row)) {
+                if ($row_count == 0) {
+                    array_push($headers, $row);    
+                } else {
+                    if ($row[3][0] == $filter_letter) {
+                        array_push($data, $row);
+                    }
                 }
             }
+            $row_count++;
+
         }
 
-        $row_count++;
+        fclose($opened_file_handler);
 
+        $end_time = microtime(true);
+        $time_executed = $end_time - $start_time;
+
+        echo "<p>Execution Time: {$time_executed} seconds ago</p>";
+
+        return [
+            'headers' => $headers,
+            'data' => $data
+        ];
     }
 
-    return [
-        'headers' => $headers,
-        'data' => $data
-    ];
-}
+    $chosen_letter = $_GET['letter'];
 
-$chosen_letter = $_GET['letter'];
-
-$customers = get_hundred_customers_data($chosen_letter);
+    $customers = get_customers_data($chosen_letter);
 
 ?>
+
+
 <html>
 <head>
     <meta charset="utf-8">
@@ -46,17 +55,16 @@ $customers = get_hundred_customers_data($chosen_letter);
 </head>
 <body>
 
-<h1>
-    Customers (Letter '<?php echo $chosen_letter; ?>')
-</h1>
+<h1> Customers (Letter '<?php echo $chosen_letter; ?>')</h1>
 <h4>
-<?php foreach(range('A', 'Z') as $letter): ?>
-    <a href="filtered.php?letter=<?php echo $letter; ?>"><?php echo $letter; ?></a>
-<?php endforeach; ?>
+    <?php foreach(range('A', 'Z') as $letter): ?>
+        <a href="filtered.php?letter=<?php echo $letter; ?>"><?php echo $letter; ?></a>
+    <?php endforeach; ?>
 </h4>
 <small>
-The dataset is retrieved from this URL <a href="https://www.datablist.com/learn/csv/download-sample-csv-files">https://www.datablist.com/learn/csv/download-sample-csv-files</a>
+    The dataset is retrieved from this URL <a href="https://www.datablist.com/learn/csv/download-sample-csv-files">https://www.datablist.com/learn/csv/download-sample-csv-files</a>
 </small>
+
 <table aria-label="Customers Dataset">
     <thead>
         <tr>

@@ -11,9 +11,8 @@
   $address = $_POST['address'];
   $email = $_POST['email'];
   $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
-  $agree = $_POST['agree'];
+  $agree = isset($_POST['agree']) ? 'Yes' : 'No';
  
-
   function calcAge($birthdate) {
     $bday = new DateTime($birthdate);
     $currentDate = new DateTime();
@@ -32,8 +31,24 @@
   $_SESSION['sex'] = $sex;
   $_SESSION['program'] = $program;
   $_SESSION['address'] = $address;
+
+  $csvFilePath = '../lab2b/registration.csv';
+
+  $file = fopen($csvFilePath, 'a');
+
+  fputcsv($file, [
+    $fullname,
+    $birthdate,
+    $age,
+    $contact_number,
+    $sex,
+    $program,
+    $address,
+    $email,
+  ]);
+
+  fclose($file);
   
-  dump_session();
   session_destroy();
 ?>
 
